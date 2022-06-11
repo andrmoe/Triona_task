@@ -1,7 +1,7 @@
 Første versjon:
 Systemet skal kunne ta inn user input med følgende data (Navn, adresse, telefonnummer, fødselsdato) 
 Systemet skal hente ut tilsvarende data fra ~~back-end~~-systemet ved å trykke på en knapp 
-Systemet skal vise dataene som er hentet fra back-end input i passende felter, og skal i tillegg ha et felt for å vise navnet baklengs, et felt som viser tverrsummen av telefonnummeret, samt et felt som viser om personen er født i et skuddår.
+Systemet skal vise dataene som er hentet fra ~~back-end~~ input i passende felter, og skal i tillegg ha et felt for å vise navnet baklengs, et felt som viser tverrsummen av telefonnummeret, samt et felt som viser om personen er født i et skuddår.
  
  
 Andre versjon:
