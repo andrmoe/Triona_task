@@ -79,7 +79,6 @@ class Person {
             HttpResponse<String> httpResponse = HttpClient.newBuilder()
                     .build()
                     .send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(httpResponse.body());
 
         } catch (Exception exception) {
             System.out.println(exception);
@@ -207,7 +206,6 @@ class Gui {
                 if (searchButtonModel.isPressed()) {
                     try {
                         Person response = getInput().search();
-                        System.out.println(response);
                         responseLabel.setText("Results:");
                         setOutput(response);
                     } catch (Exception exception) {

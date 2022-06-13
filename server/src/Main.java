@@ -4,6 +4,64 @@ import java.util.HashMap;
 import com.sun.net.httpserver.*;
 
 
+class Person {
+
+    private String name;
+    private String address;
+    private String phoneNumber;
+    private String dateOfBirth;
+
+    private static HashMap<String, Person> storage = new HashMap<>();
+
+    public Person(String json) {
+        // Remove curly braces
+
+        json = json.substring(1, json.length()-1);
+
+        if (json.length() == 0) {
+            throw new IllegalArgumentException();
+        }
+
+        String[] keysAndValues = json.split(",");
+
+        for (String keyAndValue: keysAndValues) {
+            String[] param = keyAndValue.split(":");
+            switch (param[0].substring(1, param[0].length()-1)) {
+                case "name" -> this.name = param[1].substring(1, param[1].length()-1);
+                case "address" -> this.address = param[1].substring(1, param[1].length()-1);
+                case "phoneNumber" -> this.phoneNumber = param[1].substring(1, param[1].length()-1);
+                case "dateOfBirth" -> this.dateOfBirth = param[1].substring(1, param[1].length()-1);
+            }
+        }
+    }
+
+    public Person() {
+        String message = "Not Found";
+        name = message;
+        address = message;
+        phoneNumber = message;
+        dateOfBirth = message;
+    }
+
+    public String toJSON() {
+        return "{\"name\":\"" + name + "\",\"address\":\"" + address + "\",\"phoneNumber\":\"" +
+                phoneNumber + "\",\"dateOfBirth\":\"" + dateOfBirth + "\"}";
+    }
+
+    public void store() {
+        storage.put(name, this);
+    }
+
+    public static Person lookUp(String name) {
+        if (storage.containsKey(name)) {
+            return storage.get(name);
+        } else {
+            return new Person();
+        }
+    }
+}
+
+
 class Server {
 
     public static  void main(String args[]) {
@@ -25,11 +83,12 @@ class Server {
                         responseHeaders.set("Content-Type", "application/json");
                         OutputStream responseBody  = exchange.getResponseBody();
                         exchange.sendResponseHeaders(200, 0);
-                        responseBody.write("{\"name\":\"Andreas\",\"address\":\"Munkegata 1\",\"phoneNumber\":\"01234567\",\"dateOfBirth\":\"2000-01-01\"}".getBytes());
+                        responseBody.write(Person.lookUp(name.replace('_', ' ')).toJSON().getBytes());
                         responseBody.close();
                     }
                 } else if (exchange.getRequestMethod().equalsIgnoreCase("POST")) {
-                    System.out.println(new String(exchange.getRequestBody().readAllBytes()));
+                    Person person = new Person(new String(exchange.getRequestBody().readAllBytes()));
+                    person.store();
                     exchange.sendResponseHeaders(200, -1);
                 } else {
                     exchange.sendResponseHeaders(400, -1);
